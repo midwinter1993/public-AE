@@ -245,16 +245,19 @@ $test: ./analyze-log.py | sort | uniq # Count unique bugs
 
 ## Reuse Dogfood: how to reproduce a new bug
 
-When finding a bug in the log, you can make a test case to reproduce it.
-The following steps may help:
+When finding a bug logged in the log file `workspace/vm.log`, you can make a test case to reproduce it.
+The script `workspace/bug-extract` is used to extract bug cases automatically.
+
+We also provide a complete introduction of the workflow of this script;
+these steps involved in the script may help when the script goes wrong and we have to make test cases manually.
 
 ### 1. Locate the bug, like
 
 > [  34.786048] kernel BUG at fs/f2fs/data.c:317!
 
-### 2. Check the log from the bug location backward to find the test case name, like
+### 2. Tranverse the log line by line backward from the bug location to find the test case name, which is like
 
-> TEST CASE[ ../workspace/C-output/2019_07_31-20:06:15-cGKYX/2.c with f2fs-0.img ]
+> TEST CASE [ ../workspace/C-output/2019_07_31-20:06:15-cGKYX/2.c with f2fs-0.img ]
 
 This is the C program file to manifest the bug and its disk image.
 
@@ -270,7 +273,9 @@ This is the C program file to manifest the bug and its disk image.
 - `CASE_NAME` is the name of C program file, like `2.c` in our example.
 - `FS` is the file system to test
 
-### 6. Copy the mount options line by line (the order should be the same as the log file) in the file `template/mountfood`, like
+### 6. Copy the mount options line by line to the file `template/mountfood`
+
+The order should be the same as the log file.
 
 ```shell
 options=(
