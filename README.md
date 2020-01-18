@@ -11,7 +11,7 @@ and how to reuse it for further file system testing.
 ## Obtain the artifact
 
 We have upload a docker image containing all necessary files and subjects.
-[HERE](https://drive.google.com/file/d/1RER_SpeX09MOdCvmP_czK6kVB9TTMUHQ/view?usp=sharing).
+[HERE](https://hub.docker.com/r/midwinter/dogfood)
 
 Dogfood should be used under a Linux operating system.
 Ubuntu-16.04 and Ubuntu-18.04 are recommendations as we have tested Dogfood under them.
