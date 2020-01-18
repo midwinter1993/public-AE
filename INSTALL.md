@@ -1,9 +1,20 @@
 # Install Dogfood
 
-Though we have provided scripts and pre-built artifacts, to understand the installation comprehensively,
-we introduce the workflow and its dependencies of Dogfood.
+Though we have provided scripts and pre-built artifacts, to understand the installation comprehensively, we introduce the workflow and its dependencies of Dogfood.
+
 
 ## Dogfood workflow and dependencies
+
+### TL;DR
+
+Download the docker image and run it:
+
+```bash
+docker pull midwinter/dogfood:v1
+docker run -it --rm --device /dev/kvm dogfood:v1
+```
+
+### Introduction
 
 Dogfood first uses a workload generator (implemented by Python) to produce file system call sequences;
 then, it compiles the sequences into executable files (using GCC),
@@ -39,21 +50,14 @@ sudo apt-get install -y build-essential
 
 ### Python > 3.6
 
-Python 3.6 is installed default in Ubuntu-18.04,
-but when execute `python` directly in the terminal, the command line may be not found.
-To resolve this issue, we can create a link file:
-
-```bash
-sudo ln -s /usr/bin/python3 /usr/bin/python
-```
-
-If the operating system is Ubuntu-16.04, follow the instructions [here](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/).
+Python 3.6 is installed default in Ubuntu-18.04;
+if the operating system is Ubuntu-16.04, follow the instructions [here](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/).
 
 Install python packages:
 
 ```bash
-pip install termcolor
-pip install sklearn
+pip3 install termcolor
+pip3 install sklearn
 ```
 
 ## Run Dogfood
@@ -62,17 +66,7 @@ Since testing file systems needs tedious labors,
 we provided some ready-made artifacts to ease the burden.
 We also provide comprehensive instructions step by step for further testing more file systems.
 
-### Step-0: Downloading artifacts
-
-Download from [LINK](https://drive.google.com/file/d/1RER_SpeX09MOdCvmP_czK6kVB9TTMUHQ/view?usp=sharing).
-
-Extract it:
-
-```bash
-tar -xzvf dogfood.tar.gz
-```
-
-*NOTICE*: All the following commands are run under directory `workspace/`.
+*NOTICE*: All the following commands are run under directory `/dogfood/workspace/`.
 
 ### Step-1: Building the kernel
 
@@ -91,14 +85,22 @@ tar -xzvf obj.tar.gz
 
 ### Step-2: Test QEMU
 
-Test QEMU virtual machine
+Since we need at least two terminals, one for QEMU console and another for normal manipulation.
+Tool `tmux` is preferred to open multiple terminals:
 
 ```bash
-./ctrl start
+tmux -2 # Start tmux
+Ctrl+b c # Start another terminal window
+Ctrl+b w # Switch between the windows; learn more from the tmux documentations
 ```
-
 Open another terminal.
 Now, we have two terminals and we name them as `$qemu` and `$test` (the new one), respectively.
+
+Start QEMU virtual machine and do some initializations:
+
+```bash
+$qemu: ./ctrl start
+```
 
 ```bash
 $test: ./ctrl init

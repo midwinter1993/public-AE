@@ -10,9 +10,8 @@ and how to reuse it for further file system testing.
 
 ## Obtain the artifact
 
-We have upload a compressed file containing all necessary files and subjects in the Google drive.
-
-[Download it](https://drive.google.com/file/d/1RER_SpeX09MOdCvmP_czK6kVB9TTMUHQ/view?usp=sharing) and put it in the same directory as `py-code`.
+We have upload a docker image containing all necessary files and subjects.
+[HERE](https://drive.google.com/file/d/1RER_SpeX09MOdCvmP_czK6kVB9TTMUHQ/view?usp=sharing).
 
 Dogfood should be used under a Linux operating system.
 Ubuntu-16.04 and Ubuntu-18.04 are recommendations as we have tested Dogfood under them.
@@ -23,12 +22,20 @@ Please follow the instructions in `INSTALL.md` to complete the installation.
 
 ## Reproduce results in the paper
 
-Sincd there are three testing scenarios are presented in the paper,
+Since there are three testing scenarios are presented in the paper,
 we introduce steps to reproduce the results, respectively.
 
 ### The sequential scenario
 
 #### Reproduce the detected bugs
+
+The tool `tmux` is preferred to open multiple terminals:
+
+```bash
+tmux -2 # Start tmux
+Ctrl+b c # Start another terminal window
+Ctrl+b w # Switch between the windows; learn more from the tmux documentations
+```
 
 As shown in the `INSTALL.md`, start QEMU first:
 
@@ -245,19 +252,19 @@ $test: ./analyze-log.py | sort | uniq # Count unique bugs
 
 ## Reuse Dogfood: how to reproduce a new bug
 
-When finding a bug logged in the log file `workspace/vm.log`, you can make a test case to reproduce it.
-The script `workspace/bug-extract` is used to extract bug cases automatically.
-
-We also provide a complete introduction of the workflow of this script;
-these steps involved in the script may help when the script goes wrong and we have to make test cases manually.
+When finding a bug logged in the log file `workspace/vm.log`,
+you can make a test case to reproduce it.
+The script workspace/bug-extract is used to extract bug cases automatically.
+When finding a bug in the log, you can make a test case to reproduce it.
+The following steps may help:
 
 ### 1. Locate the bug, like
 
 > [  34.786048] kernel BUG at fs/f2fs/data.c:317!
 
-### 2. Tranverse the log line by line backward from the bug location to find the test case name, which is like
+### 2. Check the log from the bug location backward to find the test case name, like
 
-> TEST CASE [ ../workspace/C-output/2019_07_31-20:06:15-cGKYX/2.c with f2fs-0.img ]
+> TEST CASE[ ../workspace/C-output/2019_07_31-20:06:15-cGKYX/2.c with f2fs-0.img ]
 
 This is the C program file to manifest the bug and its disk image.
 
@@ -273,9 +280,7 @@ This is the C program file to manifest the bug and its disk image.
 - `CASE_NAME` is the name of C program file, like `2.c` in our example.
 - `FS` is the file system to test
 
-### 6. Copy the mount options line by line to the file `template/mountfood`
-
-The order should be the same as the log file.
+### 6. Copy the mount options line by line (the order should be the same as the log file) in the file `template/mountfood`, like
 
 ```shell
 options=(
